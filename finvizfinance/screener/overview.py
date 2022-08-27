@@ -23,8 +23,9 @@ class Overview:
     Getting information from the finviz screener overview page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None):
         """initiate module"""
+        self.proxies= proxies
         self.BASE_URL = (
             "https://finviz.com/screener.ashx?v=111{signal}{filter}&ft=4{ticker}"
         )
@@ -225,7 +226,7 @@ class Overview:
             url = self.url + "&" + self.order_dict[order]
         if not ascend:
             url = url.replace("o=", "o=-")
-        soup = web_scrap(url)
+        soup = web_scrap(url, proxies=self.proxies)
 
         page = self._get_page(soup)
         if page == 0:
@@ -279,7 +280,7 @@ class Overview:
                     url += "&r={}".format(i * 20 + 1) + "&" + self.order_dict[order]
                 if not ascend:
                     url = url.replace("o=", "o=-")
-                soup = web_scrap(url)
+                soup = web_scrap(url, proxies= self.proxies)
                 table = soup.findAll("table")[19]
                 rows = table.findAll("tr")
                 df = self._screener_helper(

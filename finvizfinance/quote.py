@@ -29,13 +29,13 @@ class Quote:
 
     """
 
-    def get_current(self, ticker):
+    def get_current(self, ticker, proxies= None ):
         """Getting current price of the ticker.
 
         Returns:
             price(float): price of the ticker
         """
-        soup = web_scrap("https://finviz.com/request_quote.ashx?t={}".format(ticker))
+        soup = web_scrap("https://finviz.com/request_quote.ashx?t={}".format(ticker), proxies= proxies)
         return soup.text
 
 
@@ -48,12 +48,13 @@ class finvizfinance:
         verbose(int): choice of visual the progress. 1 for visualize progress.
     """
 
-    def __init__(self, ticker, verbose=0):
+    def __init__(self, ticker, verbose=0, proxies= None ):
         """initiate module"""
         self.ticker = ticker
         self.flag = False
         self.quote_url = QUOTE_URL.format(ticker=ticker)
-        self.soup = web_scrap(self.quote_url)
+        self.proxies= proxies
+        self.soup = web_scrap(self.quote_url, proxies= self.proxies)
         if self._checkexist(verbose):
             self.flag = True
         self.info = {}
@@ -104,7 +105,7 @@ class finvizfinance:
             ticker=self.ticker, type=url_type, ta=url_ta, timeframe=url_timeframe
         )
         if not urlonly:
-            image_scrap(chart_url, self.ticker, out_dir)
+            image_scrap(chart_url, self.ticker, out_dir, proxies= self.proxies)
         return chart_url
 
     def ticker_fundament(self, raw=True):
@@ -358,7 +359,7 @@ class Statements:
 
     """
 
-    def get_statements(self, ticker, statement="I", timeframe="A"):
+    def get_statements(self, ticker, statement="I", timeframe="A", proxies= None ):
         """Getting statements of ticker.
 
         Args:
@@ -372,7 +373,7 @@ class Statements:
             ticker=ticker, statement=statement, timeframe=timeframe
         )
         try:
-            website = requests.get(url, headers=headers)
+            website = requests.get(url, headers=headers, proxies= proxies)
             website.raise_for_status()
             response = json.loads(website.content)
             df = pd.DataFrame.from_dict(response["data"], orient="index")

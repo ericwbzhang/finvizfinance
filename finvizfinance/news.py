@@ -17,10 +17,11 @@ class News:
 
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
         self.all_news = {}
-        self.soup = web_scrap(NEWS_URL)
+        self.proxies= proxies
+        self.soup = web_scrap(NEWS_URL, proxies= self.proxies)
         self.news = {}
 
     def get_news(self):

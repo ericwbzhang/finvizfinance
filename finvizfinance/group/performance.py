@@ -13,8 +13,9 @@ class Performance(Overview):
     Getting information from the finviz group performance page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
+        self.proxies= proxies
         self.BASE_URL = "https://finviz.com/groups.ashx?{group}&v=140"
         self.url = self.BASE_URL.format(group="g=sector")
         Overview._load_setting(self)

@@ -84,7 +84,7 @@ NUMBER_COL = [
 session = requests.Session()
 
 
-def web_scrap(url):
+def web_scrap(url, proxies= None ):
     """Scrap website.
 
     Args:
@@ -93,6 +93,7 @@ def web_scrap(url):
         soup(beautiful soup): website html
     """
     try:
+        session.proxies= proxies
         website = session.get(url, headers=headers, timeout=10)
         website.raise_for_status()
         soup = BeautifulSoup(website.text, "lxml")
@@ -103,7 +104,7 @@ def web_scrap(url):
     return soup
 
 
-def image_scrap(url, ticker, out_dir):
+def image_scrap(url, ticker, out_dir, proxies= None ):
     """scrap website and download image
 
     Args:
@@ -112,6 +113,7 @@ def image_scrap(url, ticker, out_dir):
         out_dir(str): output directory
     """
     try:
+        session.proxies= proxies
         r = session.get(url, stream=True, headers=headers, timeout=10)
         r.raise_for_status()
         r.raw.decode_content = True
@@ -126,7 +128,7 @@ def image_scrap(url, ticker, out_dir):
         raise Exception(err)
 
 
-def scrap_function(url):
+def scrap_function(url, proxies= None ):
     """Scrap forex, crypto information.
 
     Args:
@@ -134,7 +136,7 @@ def scrap_function(url):
     Returns:
         df(pandas.DataFrame): performance table
     """
-    soup = web_scrap(url)
+    soup = web_scrap(url, proxies= proxies)
     table = soup.findAll("table")[3]
     rows = table.findAll("tr")
     table_header = [i.text.strip() for i in rows[0].findAll("td")][1:]
@@ -153,7 +155,7 @@ def scrap_function(url):
     return df
 
 
-def image_scrap_function(url, chart, timeframe, urlonly):
+def image_scrap_function(url, chart, timeframe, urlonly, proxies= None ):
     """Scrap forex, crypto information.
 
     Args:
@@ -175,7 +177,7 @@ def image_scrap_function(url, chart, timeframe, urlonly):
     else:
         raise ValueError("Invalid timeframe.")
 
-    soup = web_scrap(url)
+    soup = web_scrap(url, proxies= proxies)
     content = soup.find("div", class_="container")
     imgs = content.findAll("img")
     for img in imgs:
@@ -185,7 +187,7 @@ def image_scrap_function(url, chart, timeframe, urlonly):
         if chart.lower() == chart_name:
             charturl = "https://finviz.com/" + website
             if not urlonly:
-                image_scrap(charturl, name, "")
+                image_scrap(charturl, name, "", proxies= proxies)
             return charturl
         else:
             continue

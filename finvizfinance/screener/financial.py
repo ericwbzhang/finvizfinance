@@ -13,8 +13,9 @@ class Financial(Overview):
     Getting information from the finviz screener financial page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
+        self.proxies= proxies
         self.BASE_URL = (
             "https://finviz.com/screener.ashx?v=161{signal}{filter}&ft=4{ticker}"
         )

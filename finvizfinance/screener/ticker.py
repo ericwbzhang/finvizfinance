@@ -14,8 +14,9 @@ class Ticker(Overview):
     Getting information from the finviz screener ticker page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
+        self.proxies= proxies
         self.BASE_URL = (
             "https://finviz.com/screener.ashx?v=411{signal}{filter}&ft=4{ticker}"
         )
@@ -38,7 +39,7 @@ class Ticker(Overview):
         Returns:
             tickers(list): get all the tickers as list.
         """
-        soup = web_scrap(self.url)
+        soup = web_scrap(self.url, proxies= self.proxies)
         page = self._get_page(soup)
         if page == 0:
             if verbose == 1:
@@ -58,6 +59,6 @@ class Ticker(Overview):
         for i in range(1, page):
             if verbose == 1:
                 progress_bar(i + 1, page)
-            soup = web_scrap(self.url + "&r={}".format(i * 1000 + 1))
+            soup = web_scrap(self.url + "&r={}".format(i * 1000 + 1), proxies= self.proxies)
             tickers = self._screener_helper(i, page, soup, tickers, limit)
         return tickers

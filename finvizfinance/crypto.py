@@ -14,9 +14,9 @@ class Crypto:
 
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
-        pass
+        self.proxies= proxies
 
     def performance(self):
         """Get crypto performance table.
@@ -40,5 +40,5 @@ class Crypto:
         """
 
         url = "https://finviz.com/crypto_charts.ashx?t=ALL&tf="
-        charturl = image_scrap_function(url, crypto, timeframe, urlonly)
+        charturl = image_scrap_function(url, crypto, timeframe, urlonly, proxies= self.proxies)
         return charturl

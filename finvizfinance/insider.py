@@ -21,40 +21,41 @@ class Insider:
                       top owner sales, insider_id)
     """
 
-    def __init__(self, option="latest"):
+    def __init__(self, option="latest", proxies= None ):
         """initiate module"""
+        self.proxies= proxies
         if option == "latest":
-            self.soup = web_scrap(INSIDER_URL)
+            self.soup = web_scrap(INSIDER_URL, proxies= self.proxies)
         elif option == "latest buys":
-            self.soup = web_scrap(INSIDER_URL + "?tc=1")
+            self.soup = web_scrap(INSIDER_URL + "?tc=1", proxies= self.proxies)
         elif option == "latest sales":
-            self.soup = web_scrap(INSIDER_URL + "?tc=2")
+            self.soup = web_scrap(INSIDER_URL + "?tc=2", proxies= self.proxies)
         elif option == "top week":
             self.soup = web_scrap(
-                INSIDER_URL + "?or=-10&tv=100000&tc=7&o=-transactionValue"
+                INSIDER_URL + "?or=-10&tv=100000&tc=7&o=-transactionValue", proxies= self.proxies
             )
         elif option == "top week buys":
             self.soup = web_scrap(
-                INSIDER_URL + "?or=-10&tv=100000&tc=1&o=-transactionValue"
+                INSIDER_URL + "?or=-10&tv=100000&tc=1&o=-transactionValue", proxies= self.proxies
             )
         elif option == "top week sales":
             self.soup = web_scrap(
-                INSIDER_URL + "?or=-10&tv=100000&tc=2&o=-transactionValue"
+                INSIDER_URL + "?or=-10&tv=100000&tc=2&o=-transactionValue", proxies= self.proxies
             )
         elif option == "top owner trade":
             self.soup = web_scrap(
-                INSIDER_URL + "?or=10&tv=1000000&tc=7&o=-transactionValue"
+                INSIDER_URL + "?or=10&tv=1000000&tc=7&o=-transactionValue", proxies= self.proxies
             )
         elif option == "top owner buys":
             self.soup = web_scrap(
-                INSIDER_URL + "?or=10&tv=1000000&tc=1&o=-transactionValue"
+                INSIDER_URL + "?or=10&tv=1000000&tc=1&o=-transactionValue", proxies= self.proxies
             )
         elif option == "top owner sales":
             self.soup = web_scrap(
-                INSIDER_URL + "?or=10&tv=1000000&tc=2&o=-transactionValue"
+                INSIDER_URL + "?or=10&tv=1000000&tc=2&o=-transactionValue", proxies= self.proxies
             )
         elif option.isdigit():
-            self.soup = web_scrap(INSIDER_URL + "?oc=" + option + "&tc=7")
+            self.soup = web_scrap(INSIDER_URL + "?oc=" + option + "&tc=7", proxies= self.proxies)
         self.df = None
 
     def get_insider(self):

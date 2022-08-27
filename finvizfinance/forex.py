@@ -13,9 +13,9 @@ class Forex:
     Getting information from the finviz forex page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
-        pass
+        self.proxies= proxies
 
     def performance(self, change="percent"):
         """Get forex performance table.
@@ -33,7 +33,7 @@ class Forex:
             url = "https://finviz.com/forex_performance.ashx?v=1&tv=2&o=-perfdaypct"
         else:
             raise ValueError("Options of change: percent(default), PIPS")
-        df = scrap_function(url)
+        df = scrap_function(url, proxies= self.proxies)
         return df
 
     def chart(self, forex, timeframe="D", urlonly=False):
@@ -50,5 +50,5 @@ class Forex:
             return None
 
         url = "https://finviz.com/forex_charts.ashx?t=ALL&tf="
-        charturl = image_scrap_function(url, forex, timeframe, urlonly)
+        charturl = image_scrap_function(url, forex, timeframe, urlonly, proxies= self.proxies)
         return charturl

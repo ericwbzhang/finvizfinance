@@ -15,15 +15,16 @@ class Overview:
     Getting information from the finviz group overview page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
+        self.proxies= proxies
         self.BASE_URL = "https://finviz.com/groups.ashx?{group}&v=110"
         self.url = self.BASE_URL.format(group="g=sector")
         self._load_setting()
 
     def _load_setting(self):
         """load all the groups."""
-        soup = web_scrap(self.url)
+        soup = web_scrap(self.url, proxies= self.proxies)
         selects = soup.findAll("select")
 
         # group
@@ -81,7 +82,7 @@ class Overview:
             + self.order_dict[order]
         )
 
-        soup = web_scrap(self.url)
+        soup = web_scrap(self.url, proxies= self.proxies)
         table = soup.findAll("table")[5]
         rows = table.findAll("tr")
         table_header = [i.text for i in rows[0].findAll("td")][1:]

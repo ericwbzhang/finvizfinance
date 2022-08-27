@@ -46,8 +46,9 @@ class Custom(Overview):
     Getting information from the finviz group custom page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
+        self.proxies= proxies
         self.BASE_URL = "https://finviz.com/groups.ashx?{group}&v=152"
         self.url = self.BASE_URL.format(group="g=sector")
         Overview._load_setting(self)
@@ -84,7 +85,7 @@ class Custom(Overview):
         columns = [str(i) for i in columns]
         self.url += "&c=" + ",".join(columns)
 
-        soup = web_scrap(self.url)
+        soup = web_scrap(self.url, proxies= self.proxies)
         table = soup.findAll("table")[6]
         rows = table.findAll("tr")
         table_header = [i.text for i in rows[0].findAll("td")][1:]

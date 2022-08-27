@@ -14,8 +14,9 @@ class Spectrum(Overview):
     Getting information from the finviz group spectrum page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
+        self.proxies= proxies
         self.BASE_URL = "https://finviz.com/groups.ashx?{group}&v=310"
         self.url = self.BASE_URL.format(group="g=sector")
         Overview._load_setting(self)
@@ -37,6 +38,6 @@ class Spectrum(Overview):
             + self.order_dict[order]
         )
 
-        soup = web_scrap(self.url)
+        soup = web_scrap(self.url, proxies= self.proxies)
         url = "https://finviz.com/" + soup.findAll("img")[5]["src"]
-        image_scrap(url, group, "")
+        image_scrap(url, group, "", proxies= self.proxies)

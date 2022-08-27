@@ -15,9 +15,9 @@ class Calendar:
     Getting information from the finviz calendar page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
-        pass
+        self.proxies= proxies
 
     def calendar(self):
         """Get economic calendar table.
@@ -25,7 +25,7 @@ class Calendar:
         Returns:
             df(pandas.DataFrame): economic calendar table
         """
-        soup = web_scrap("https://finviz.com/calendar.ashx")
+        soup = web_scrap("https://finviz.com/calendar.ashx", proxies= self.proxies)
         tables = soup.findAll("table", class_="calendar")
         columns = [
             "Datetime",

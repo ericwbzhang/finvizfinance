@@ -13,8 +13,9 @@ class Ownership(Overview):
     Getting information from the finviz screener ownership page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
+        self.proxies= proxies
         self.BASE_URL = (
             "https://finviz.com/screener.ashx?v=131{signal}{filter}&ft=4{ticker}"
         )

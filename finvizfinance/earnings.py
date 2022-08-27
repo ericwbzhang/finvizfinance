@@ -25,8 +25,9 @@ class Earnings:
                      Previous Week, This Month).
     """
 
-    def __init__(self, period="This Week"):
+    def __init__(self, period="This Week", proxies= None):
         """initiate module"""
+        self.proxies= proxies
         self.earning_days = []
         self.df_days = {}
         self.df = None
@@ -46,7 +47,7 @@ class Earnings:
                 "Invalid period '{}'. Available period: {}".format(period, check_list)
             )
         self.period = period
-        ffinancial = Financial()
+        ffinancial = Financial( proxies= self.proxies)
         filters_dict = {"Earnings Date": period}
         ffinancial.set_filter(filters_dict=filters_dict)
         self.df = ffinancial.screener_view(order="Earnings Date", verbose=0)
@@ -87,15 +88,15 @@ class Earnings:
         if mode == "financial":
             return self.df_days
         elif mode == "overview":
-            fearnings = Overview()
+            fearnings = Overview( proxies= self.proxies)
         elif mode == "valuation":
-            fearnings = Valuation()
+            fearnings = Valuation( proxies= self.proxies)
         elif mode == "ownership":
-            fearnings = Ownership()
+            fearnings = Ownership( proxies= self.proxies)
         elif mode == "performance":
-            fearnings = Performance()
+            fearnings = Performance( proxies= self.proxies)
         elif mode == "technical":
-            fearnings = Technical()
+            fearnings = Technical( proxies= self.proxies)
 
         filters_dict = {"Earnings Date": self.period}
         fearnings.set_filter(filters_dict=filters_dict)

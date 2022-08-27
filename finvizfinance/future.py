@@ -15,9 +15,9 @@ class Future:
     Getting information from the finviz future page.
     """
 
-    def __init__(self):
+    def __init__(self, proxies= None ):
         """initiate module"""
-        pass
+        self.proxies= proxies
 
     def performance(self, timeframe="D"):
         """Get forex performance table.
@@ -44,7 +44,7 @@ class Future:
         else:
             raise ValueError("Invalid timeframe '{}'".format(timeframe))
 
-        soup = web_scrap("https://finviz.com/futures_performance.ashx" + params)
+        soup = web_scrap("https://finviz.com/futures_performance.ashx" + params, proxies= self.proxies)
         data = soup.text[
             soup.text.find("var rows = ")
             + 11 : soup.text.find("FinvizInitFuturesPerformance(rows);")
