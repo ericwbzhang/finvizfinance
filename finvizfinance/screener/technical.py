@@ -13,11 +13,4 @@ class Technical(Overview):
     Getting information from the finviz screener technical page.
     """
 
-    def __init__(self, proxies= None ):
-        """initiate module"""
-        self.proxies= proxies
-        self.BASE_URL = (
-            "https://finviz.com/screener.ashx?v=171{signal}{filter}&ft=4{ticker}"
-        )
-        self.url = self.BASE_URL.format(signal="", filter="", ticker="")
-        Overview._load_setting(self)
+    v_page = 171
