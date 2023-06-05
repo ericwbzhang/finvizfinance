@@ -132,18 +132,24 @@ class finvizfinance:
 
         try:
             fundament_info["Company"] = rows[1].text
-            (
-                fundament_info["Sector"],
-                fundament_info["Industry"],
-                fundament_info["Country"],
-            ) = rows[2].text.split(" | ")
+            row_split = rows[2].text.split(" | ")
+            fundament_info["Sector"] = row_split[0]
+            fundament_info['Industry'] = row_split[1]
+            fundament_info['Country'] = row_split[2]
         except IndexError:
-            (_, fundament_info["Company"], _) = rows[0].text.split(' | ')
-            (
-                fundament_info["Sector"],
-                fundament_info["Industry"],
-                fundament_info["Country"],
-            ) = rows[1].text.split(" | ")
+            try:
+                row_split = rows[0].text.split(' | ')
+                fundament_info["Company"] = row_split[1]
+                row_split = rows[1].text.split(" | ")
+                fundament_info["Sector"] = row_split[0]
+                fundament_info['Industry'] = row_split[1]
+                fundament_info['Country'] = row_split[2]
+            except IndexError:
+                print('Cannot parse Company, Sector, Industry and Country')
+                fundament_info["Company"] = ''
+                fundament_info["Sector"] = ''
+                fundament_info["Industry"] = ''
+                fundament_info["Country"] = ''
 
         fundament_table = self.soup.find("table", class_="snapshot-table2")
         rows = fundament_table.findAll("tr")
@@ -237,8 +243,12 @@ class finvizfinance:
         frame = []
         try:
             rows = fullview_ratings_outer.findAll("td", class_="fullview-ratings-inner")
+            if len(rows) == 0:
+                rows = fullview_ratings_outer.findAll('tr')[1:]
             for row in rows:
                 each_row = row.find("tr")
+                if not each_row:
+                    each_row = row
                 cols = each_row.findAll("td")
                 date = cols[0].text
                 date = datetime.strptime(date, "%b-%d-%y")
