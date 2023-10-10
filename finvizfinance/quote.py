@@ -244,7 +244,7 @@ class finvizfinance:
             df(pandas.DataFrame): outer ratings table
         """
         fullview_ratings_outer = self.soup.find(
-            "table", class_="fullview-ratings-outer"
+            "table", class_="js-table-ratings"
         )
         frame = []
         try:
