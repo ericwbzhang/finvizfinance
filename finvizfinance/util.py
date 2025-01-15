@@ -145,7 +145,10 @@ def number_covert(num):
     """
     if not num or num == "-":  # Check if the string is empty or is "-"
         return None
-    num = num.strip()  # Remove any surrounding whitespace
+    num = num.strip() 
+    if len(num)==0: 
+        return None
+    # Remove any surrounding whitespace
     if num[-1] == "%":
         return float(num[:-1]) / 100
     elif num[-1] == "B":
