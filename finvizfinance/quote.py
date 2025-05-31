@@ -312,27 +312,31 @@ class finvizfinance:
             df(pandas.DataFrame): insider information table
         """
         inside_trader = self.soup.find("table", class_="body-table")
-        rows = inside_trader.find_all("tr")
-        table_header = [i.text for i in rows[0].find_all("th")]
-        table_header += ["SEC Form 4 Link", "Insider_id"]
-        frame = []
-        rows = rows[1:]
-        num_col = ["Cost", "#Shares", "Value ($)", "#Shares Total"]
-        num_col_index = [table_header.index(i) for i in table_header if i in num_col]
-        for row in rows:
-            cols = row.find_all("td")
-            info_dict = {}
-            for i, col in enumerate(cols):
-                if i not in num_col_index:
-                    info_dict[table_header[i]] = col.text
-                else:
-                    info_dict[table_header[i]] = number_covert(col.text)
-            info_dict["SEC Form 4 Link"] = cols[-1].find("a").attrs["href"]
-            info_dict["Insider_id"] = cols[0].a["href"].split("oc=")[1].split("&tc=")[0]
-            frame.append(info_dict)
-        df = pd.DataFrame(frame)
-        self.info["inside trader"] = df
-        return df
+        if inside_trader is not None:
+            rows = inside_trader.find_all("tr")
+            table_header = [i.text for i in rows[0].find_all("th")]
+            table_header += ["SEC Form 4 Link", "Insider_id"]
+            frame = []
+            rows = rows[1:]
+            num_col = ["Cost", "#Shares", "Value ($)", "#Shares Total"]
+            num_col_index = [table_header.index(i) for i in table_header if i in num_col]
+            for row in rows:
+                cols = row.find_all("td")
+                info_dict = {}
+                for i, col in enumerate(cols):
+                    if i not in num_col_index:
+                        info_dict[table_header[i]] = col.text
+                    else:
+                        info_dict[table_header[i]] = number_covert(col.text)
+                info_dict["SEC Form 4 Link"] = cols[-1].find("a").attrs["href"]
+                info_dict["Insider_id"] = cols[0].a["href"].split("oc=")[1].split("&tc=")[0]
+                frame.append(info_dict)
+            df = pd.DataFrame(frame)
+            self.info["inside trader"] = df
+            return df
+        else:
+            print(f"No inside trading found of {self.ticker} ")
+            return None
 
     def ticker_signal(self):
         """Get all the trading signals from finviz.
